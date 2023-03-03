@@ -10,26 +10,26 @@ Player::Player()
 	m_name = "unknown";
 	player_number = 0;
 
-	HRESULT hCreateGuid = CoCreateGuid(&id);
+	HRESULT hCreateGuid = CoCreateGuid(&player_id);
 }
 
-GUID Player::get_id() {
-	return id;
+GUID Player::Id() {
+	return player_id;
 }
 
-void Player::name(std::string target_name) {
+void Player::Name(std::string target_name) {
 	m_name = target_name;
 }
 
-std::string Player::get_name() {
+std::string Player::Name() {
 	return m_name;
 }
 
-void Player::hit_points(int hitpoints) {
+void Player::HitPoints(int hitpoints) {
 	health = hitpoints;
 }
 
-int Player::hit_points() {
+int Player::HitPoints() {
 	return health;
 }
 
