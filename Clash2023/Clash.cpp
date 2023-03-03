@@ -107,7 +107,7 @@ void Clash::dumpScreenData() {
 	std::string standard_spacing = "";
 	string_of_chars(standard_spacing, " ", 3);
 
-	std::cout << "Dump Screen\n\n";
+	std::cout << ".-==Dump Screen==-.\n\n";
 
 
 	for (int y = 0; y < BOARD_HEIGHT; y++) {
