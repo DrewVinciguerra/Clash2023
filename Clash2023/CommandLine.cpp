@@ -117,7 +117,7 @@ void CommandLine::start() {
         case DUMPSCREEN:
             std::cout << "SCREEN DUMP\n\n";
             if (myClash) {
-                myClash->dumpScreenData();
+                myClash->DumpScreenData();
             }
             else {
                 std::cout << "ERROR: Clash not started.\n>:";
@@ -189,13 +189,13 @@ void CommandLine::start() {
 
             if (myClash) {
                 std::vector<Player>* my_players;
-                my_players = myClash->players();
+                my_players = myClash->Players();
 
                 std::cout << "\n---CURRENT PLAYERS---\n";
 
                 for (Player& e : *my_players) {
-                    std::cout << "Player Name:\t" << e.get_name() << "\n";
-                    std::cout << "Hit Points:\t" << e.hit_points() << "\n";
+                    std::cout << "Player Name:\t" << e.Name() << "\n";
+                    std::cout << "Hit Points:\t" << e.HitPoints() << "\n";
                     std::cout << "\n";
                 }
                 std::cout << "----------\n";
@@ -225,7 +225,7 @@ void CommandLine::start() {
 void CommandLine::AddPlayer1(Clash* myClash) {
     std::cout << "ADD PLAYER 1\n\n";
     if (myClash) {
-        myClash->addPlayer("Andrea", 1);
+        myClash->AddPlayer("Andrea", 1);
     }
     else {
         std::cout << "ERROR: Clash not started.\n>:";
@@ -236,7 +236,7 @@ void CommandLine::AddPlayer1(Clash* myClash) {
 void CommandLine::AddPlayer2(Clash* myClash) {
     std::cout << "ADD PLAYER 2\n\n";
     if (myClash) {
-        myClash->addPlayer("Billy", 2);
+        myClash->AddPlayer("Billy", 2);
     }
     else {
         std::cout << "ERROR: Clash not started.\n>:";
@@ -246,7 +246,7 @@ void CommandLine::AddPlayer2(Clash* myClash) {
 void CommandLine::AddPlayer(Clash* myClash) {
     std::cout << "ADD PLAYER\n\n";
     if (myClash) {
-        std::vector<Player>* p_player_vec = myClash->players();
+        std::vector<Player>* p_player_vec = myClash->Players();
         int player_count = (int)p_player_vec->size();
         player_count++;
         std::cout << "Adding player #" << player_count << "\n\n";
@@ -256,7 +256,7 @@ void CommandLine::AddPlayer(Clash* myClash) {
 
         std::cout << "\n Adding " << name << " as player #" << player_count << "\n\n";
 
-        myClash->addPlayer(name, player_count);
+        myClash->AddPlayer(name, player_count);
     }
     else {
         std::cout << "ERROR: Clash not started.\n>:";
@@ -270,11 +270,11 @@ void CommandLine::SetupBoard(Clash* myClash) {
     if (myClash) {
         std::cout << "\n---SETTING UP PLAYERS---\n";
         std::vector<Player>* p_myplayers;
-        p_myplayers = myClash->players();
+        p_myplayers = myClash->Players();
 
 
         for (Player& e : *p_myplayers) {
-            std::cout << "Placing player: " << e.get_name() << " on the board.\n";
+            std::cout << "Placing player: " << e.Name() << " on the board.\n";
             int pn = e.PlayerNumber();
 
             if (pn == 1) {
@@ -285,7 +285,7 @@ void CommandLine::SetupBoard(Clash* myClash) {
             }
             else {
 
-                std::cout << "Warning: Too many players: " << e.get_name() << " will not be placed on the board.\n";
+                std::cout << "Warning: Too many players: " << e.Name() << " will not be placed on the board.\n";
             }
 
             //todo Place summoning circle for each player

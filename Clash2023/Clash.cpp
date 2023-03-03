@@ -5,7 +5,7 @@ Clash::Clash()
 {     // Constructor
 	std::cout << "Clash Constructor\n";
 	test_setupClash();
-	setupClash();
+	SetupClash();
 
 }
 
@@ -16,7 +16,7 @@ Clash::~Clash() {
 }
 
 
-int Clash::setupClash()
+int Clash::SetupClash()
 {
 	int count = 0;
 
@@ -97,15 +97,15 @@ int Clash::test_setupClash()
 }
 
 
-void Clash::dumpScreenData() {
+void Clash::DumpScreenData() {
 
 	int hex_width = 13;
 	std::string worker_str = "";
-	string_of_chars(worker_str, "-", hex_width);
+	StringOfChars(worker_str, "-", hex_width);
 	std::string indent_spacing = "";
-	string_of_chars(indent_spacing, " ", 9);
+	StringOfChars(indent_spacing, " ", 9);
 	std::string standard_spacing = "";
-	string_of_chars(standard_spacing, " ", 3);
+	StringOfChars(standard_spacing, " ", 3);
 
 	std::cout << ".-==Dump Screen==-.\n\n";
 
@@ -114,7 +114,7 @@ void Clash::dumpScreenData() {
 
 		// ======================= TOP BORDER ============================
 		std::cout << "\n";
-		if (odd(y)) {
+		if (Odd(y)) {
 			std::cout << indent_spacing;
 		}
 
@@ -125,7 +125,7 @@ void Clash::dumpScreenData() {
 
 		//======================= LINE 1. Hex coords =======================
 		std::cout << "\n";
-		if (odd(y)) {
+		if (Odd(y)) {
 			std::cout << indent_spacing;
 		}
 		for (int x = 0; x < BOARD_WIDTH; x++) {
@@ -136,11 +136,11 @@ void Clash::dumpScreenData() {
 			int pre_pad_length = 1;
 
 			std::string pre_pad_str;
-			string_of_chars(pre_pad_str, " ", pre_pad_length);
+			StringOfChars(pre_pad_str, " ", pre_pad_length);
 			std::string post_pad_str;
 
 			int post_pad_length = hex_width - (length + 1);
-			string_of_chars(post_pad_str, " ", post_pad_length);
+			StringOfChars(post_pad_str, " ", post_pad_length);
 
 			std::cout << "|" << pre_pad_str << cell_value << post_pad_str << "|" << standard_spacing;
 
@@ -149,7 +149,7 @@ void Clash::dumpScreenData() {
 
 		// =======================  LINE 2.  Player Info =======================
 		std::cout << "\n";
-		if (odd(y)) {
+		if (Odd(y)) {
 			std::cout << indent_spacing;
 		}
 
@@ -158,12 +158,12 @@ void Clash::dumpScreenData() {
 			Player* p_player_data = hex_board_array[x][y].player();
 
 			if (p_player_data) {
-				std::string player_name = p_player_data->get_name();
-				std::string worker_str = createHexLine(player_name, hex_width);
+				std::string player_name = p_player_data->Name();
+				std::string worker_str = CreateHexLine(player_name, hex_width);
 				std::cout << worker_str << standard_spacing;
 			}
 			else {
-				std::string worker_str = createHexLine("", hex_width);
+				std::string worker_str = CreateHexLine("", hex_width);
 				std::cout << worker_str << standard_spacing;
 			}
 
@@ -172,7 +172,7 @@ void Clash::dumpScreenData() {
 
 		// =======================  LINE 3. CREATURES =======================
 		std::cout << "\n";
-		if (odd(y)) {
+		if (Odd(y)) {
 			std::cout << indent_spacing;
 		}
 
@@ -184,11 +184,11 @@ void Clash::dumpScreenData() {
 			if (p_creature_value) {
 				//std::string player_name = p_creature_value->get_name();
 				std::string player_name = "";
-				std::string worker_str = createHexLine(player_name, hex_width);
+				std::string worker_str = CreateHexLine(player_name, hex_width);
 				std::cout << worker_str << standard_spacing;
 			}
 			else {
-				std::string worker_str = createHexLine("", hex_width);
+				std::string worker_str = CreateHexLine("", hex_width);
 				std::cout << worker_str << standard_spacing;
 			}
 
@@ -199,7 +199,7 @@ void Clash::dumpScreenData() {
 		// =======================  LINE 4. TERRAIN =======================
 
 		std::cout << "\n";
-		if (odd(y)) {
+		if (Odd(y)) {
 			std::cout << indent_spacing;
 		}
 
@@ -210,11 +210,11 @@ void Clash::dumpScreenData() {
 			if (p_terrain_data) {
 //				Terrain::TERRAIN_TYPE tt = p_terrain_data->Get_Terrain();
 				std::string Terrain_name = p_terrain_data->TerrainName();
-				std::string worker_str = createHexLine(Terrain_name, hex_width);
+				std::string worker_str = CreateHexLine(Terrain_name, hex_width);
 				std::cout << worker_str << standard_spacing;
 			}
 			else {
-				std::string worker_str = createHexLine("", hex_width);
+				std::string worker_str = CreateHexLine("", hex_width);
 				std::cout << worker_str << standard_spacing;
 			}
 		}
@@ -226,7 +226,7 @@ void Clash::dumpScreenData() {
 
 		// ================================= BOTTOM BORDER =================================
 		std::cout << "\n";
-		if (odd(y)) {
+		if (Odd(y)) {
 			std::cout << indent_spacing;
 		}
 		for (int x = 0; x < BOARD_WIDTH; x++) {
@@ -239,7 +239,7 @@ void Clash::dumpScreenData() {
 
 }
 
-std::string Clash::createHexLine(std::string centered_str, int total_length) {
+std::string Clash::CreateHexLine(std::string centered_str, int total_length) {
 	std::string retval = "";
 
 	int str_length = (int)centered_str.length();
@@ -253,9 +253,9 @@ std::string Clash::createHexLine(std::string centered_str, int total_length) {
 
 
 	std::string pre_pad_str;
-	string_of_chars(pre_pad_str, " ", pre_pad_length);
+	StringOfChars(pre_pad_str, " ", pre_pad_length);
 	std::string post_pad_str;
-	string_of_chars(post_pad_str, " ", post_pad_length);
+	StringOfChars(post_pad_str, " ", post_pad_length);
 	/*			if (cell_value < 10) {
 		pad_str = "0";
 	};
@@ -268,7 +268,7 @@ std::string Clash::createHexLine(std::string centered_str, int total_length) {
 
 }
 
-std::string Clash::string_of_chars(std::string &dest, std::string value, int length) {
+std::string Clash::StringOfChars(std::string &dest, std::string value, int length) {
 
 	for (int i = 0; i < length; i++) {
 		dest += value;
@@ -281,7 +281,7 @@ void Clash::test_dumpScreenData() {
 
 	for (int y = 0; y < BOARD_HEIGHT; y++) {
 
-		if (odd(y)) {
+		if (Odd(y)) {
 			//odd
 			std::cout << "\t";
 		}
@@ -304,7 +304,7 @@ void Clash::test_dumpScreenDataV2() {
 	for (int y = 0; y < BOARD_HEIGHT; y++) {
 
 		std::cout << "\n";
-		if (odd(y)) {
+		if (Odd(y)) {
 			//odd
 			std::cout << "\t";
 		}
@@ -313,7 +313,7 @@ void Clash::test_dumpScreenDataV2() {
 		}
 
 		std::cout << "\n";
-		if (odd(y)) {
+		if (Odd(y)) {
 			//odd
 			std::cout << "\t";
 		}
@@ -322,7 +322,7 @@ void Clash::test_dumpScreenDataV2() {
 		}
 
 		std::cout << "\n";
-		if (odd(y)) {
+		if (Odd(y)) {
 			//odd
 			std::cout << "\t";
 		}
@@ -338,7 +338,7 @@ void Clash::test_dumpScreenDataV2() {
 		}
 
 		std::cout << "\n";
-		if (odd(y)) {
+		if (Odd(y)) {
 			//odd
 			std::cout << "\t";
 		}
@@ -347,7 +347,7 @@ void Clash::test_dumpScreenDataV2() {
 		}
 
 		std::cout << "\n";
-		if (odd(y)) {
+		if (Odd(y)) {
 			//odd
 			std::cout << "\t";
 		}
@@ -362,7 +362,7 @@ void Clash::test_dumpScreenDataV2() {
 
 
 
-bool Clash::odd(int value) {
+bool Clash::Odd(int value) {
 	bool retval = false;
 
 	retval = (value % 2) == 0;
@@ -372,16 +372,16 @@ bool Clash::odd(int value) {
 
 }
 
-void Clash::addPlayer(std::string name, int player_number)
+void Clash::AddPlayer(std::string name, int player_number)
 {
 	// TODO: Add your implementation code here.
 	Player* current_player = new Player;
-	current_player->name(name);
+	current_player->Name(name);
 	current_player->PlayerNumber(player_number);
 	player_vector.push_back(*current_player);
 }
 
-std::vector<Player>* Clash::players() {
+std::vector<Player>* Clash::Players() {
 	return &player_vector;
 }
 
