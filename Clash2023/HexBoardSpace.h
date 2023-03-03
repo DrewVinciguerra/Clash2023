@@ -7,17 +7,17 @@ class HexBoardSpace
 {
 public:
 	HexBoardSpace();
-	void name(std::string);
-	std::string name();
+	void Name(std::string);
+	std::string Name();
 
-	void terrain(Terrain* terrain_value);
-	Terrain* terrain();
+	void TerrainData(Terrain* terrain_value);
+	Terrain* TerrainData();
 
-	void creature(Creature* creature_value);
-	Creature* creature();
+	void CreatureData(Creature* creature_value);
+	Creature* CreatureData();
 
-	void player(Player* player_value);
-	Player* player();
+	void PlayerData(Player* player_value);
+	Player* PlayerData();
 
 
 

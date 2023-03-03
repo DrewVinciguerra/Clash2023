@@ -23,56 +23,56 @@ int Clash::SetupClash()
 	for (int y = 0; y < BOARD_HEIGHT; y++) {
 		for (int x = 0; x < BOARD_WIDTH; x++) {
 			std::string dum = std::format("{}-{}", x, y);
-			hex_board_array[x][y].name(dum);
+			hex_board_array[x][y].Name(dum);
 
 			if (x == 2 && y == 1) {
 				// Set Player 1 Wizard Position
 				Terrain* p_worker_terrain = new Terrain();
-				p_worker_terrain->Set_Terrain(Terrain::PLAYER_1_STARTING_LAND);
+				p_worker_terrain->TerrainData(Terrain::PLAYER_1_STARTING_LAND);
 				terrain_vector.push_back(*p_worker_terrain);
-				hex_board_array[x][y].terrain(p_worker_terrain);
+				hex_board_array[x][y].TerrainData(p_worker_terrain);
 			}
 			else if (x == 2 && y == 5) {
 				// Set Player 2 Wizard Position
 				Terrain* p_worker_terrain = new Terrain();
-				p_worker_terrain->Set_Terrain(Terrain::PLAYER_2_STARTING_LAND);
+				p_worker_terrain->TerrainData(Terrain::PLAYER_2_STARTING_LAND);
 				terrain_vector.push_back(*p_worker_terrain);
-				hex_board_array[x][y].terrain(p_worker_terrain);
+				hex_board_array[x][y].TerrainData(p_worker_terrain);
 			} 
 			else if (x == 3 && y == 1) {
 				// Set Player 1 Summoning
 				Terrain* p_worker_terrain = new Terrain();
-				p_worker_terrain->Set_Terrain(Terrain::PLAYER_1_SUMMONING);
+				p_worker_terrain->TerrainData(Terrain::PLAYER_1_SUMMONING);
 				terrain_vector.push_back(*p_worker_terrain);
-				hex_board_array[x][y].terrain(p_worker_terrain);
+				hex_board_array[x][y].TerrainData(p_worker_terrain);
 			}
 			else if (x == 3 && y == 5) {
 				// Set Player 2 Summoning
 				Terrain* p_worker_terrain = new Terrain();
-				p_worker_terrain->Set_Terrain(Terrain::PLAYER_2_SUMMONING);
+				p_worker_terrain->TerrainData(Terrain::PLAYER_2_SUMMONING);
 				terrain_vector.push_back(*p_worker_terrain);
-				hex_board_array[x][y].terrain(p_worker_terrain);
+				hex_board_array[x][y].TerrainData(p_worker_terrain);
 			} 
 			else if (x == 0 && y == 0) {
 				// Set Player 1 Mana Source
 				Terrain* p_worker_terrain = new Terrain();
-				p_worker_terrain->Set_Terrain(Terrain::PLAYER_1_MANA_SOURCE);
+				p_worker_terrain->TerrainData(Terrain::PLAYER_1_MANA_SOURCE);
 				terrain_vector.push_back(*p_worker_terrain);
-				hex_board_array[x][y].terrain(p_worker_terrain);
+				hex_board_array[x][y].TerrainData(p_worker_terrain);
 			}
 			else if (x == 0 && y == 6) {
 				// Set Player 2 Mana Source
 				Terrain* p_worker_terrain = new Terrain();
-				p_worker_terrain->Set_Terrain(Terrain::PLAYER_2_MANA_SOURCE);
+				p_worker_terrain->TerrainData(Terrain::PLAYER_2_MANA_SOURCE);
 				terrain_vector.push_back(*p_worker_terrain);
-				hex_board_array[x][y].terrain(p_worker_terrain);
+				hex_board_array[x][y].TerrainData(p_worker_terrain);
 			}
 			else {
 				// Default to Grass
 				Terrain* p_worker_terrain = new Terrain();
-				p_worker_terrain->Set_Terrain(Terrain::GRASS);
+				p_worker_terrain->TerrainData(Terrain::GRASS);
 				terrain_vector.push_back(*p_worker_terrain);
-				hex_board_array[x][y].terrain(p_worker_terrain);
+				hex_board_array[x][y].TerrainData(p_worker_terrain);
 			}
 
 		}
@@ -130,7 +130,7 @@ void Clash::DumpScreenData() {
 		}
 		for (int x = 0; x < BOARD_WIDTH; x++) {
 			//std::cout << "|             |" << standard_spacing;
-			std::string cell_value = hex_board_array[x][y].name();
+			std::string cell_value = hex_board_array[x][y].Name();
 			int length = (int)cell_value.length();
 
 			int pre_pad_length = 1;
@@ -155,7 +155,7 @@ void Clash::DumpScreenData() {
 
 		for (int x = 0; x < BOARD_WIDTH; x++) {
 
-			Player* p_player_data = hex_board_array[x][y].player();
+			Player* p_player_data = hex_board_array[x][y].PlayerData();
 
 			if (p_player_data) {
 				std::string player_name = p_player_data->Name();
@@ -177,8 +177,8 @@ void Clash::DumpScreenData() {
 		}
 
 		for (int x = 0; x < BOARD_WIDTH; x++) {
-			std::string cell_value = hex_board_array[x][y].name();
-			Creature* p_creature_value = hex_board_array[x][y].creature();
+			std::string cell_value = hex_board_array[x][y].Name();
+			Creature* p_creature_value = hex_board_array[x][y].CreatureData();
 			// todo get the rest of the values of the hex and display all the data.  Maybe each value from terrain is on a different line?? 
 
 			if (p_creature_value) {
@@ -205,7 +205,7 @@ void Clash::DumpScreenData() {
 
 		for (int x = 0; x < BOARD_WIDTH; x++) {
 
-			Terrain* p_terrain_data = hex_board_array[x][y].terrain();
+			Terrain* p_terrain_data = hex_board_array[x][y].TerrainData();
 
 			if (p_terrain_data) {
 //				Terrain::TERRAIN_TYPE tt = p_terrain_data->Get_Terrain();
@@ -387,6 +387,6 @@ std::vector<Player>* Clash::Players() {
 
 void Clash::PlacePlayerOnBoard(int x, int y, Player* target_player) {
 
-	hex_board_array[x][y].player(target_player);
+	hex_board_array[x][y].PlayerData(target_player);
 
 }

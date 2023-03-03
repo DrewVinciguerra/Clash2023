@@ -9,44 +9,44 @@ HexBoardSpace::HexBoardSpace()
 }
 
 
-void HexBoardSpace::name(std::string name_value)
+void HexBoardSpace::Name(std::string name_value)
 {
 	// TODO: Add your implementation code here.
 	m_name = name_value;
 }
 
-std::string HexBoardSpace::name()
+std::string HexBoardSpace::Name()
 {
 	// TODO: Add your implementation code here.
 	return m_name;
 }
 
-void HexBoardSpace::terrain(Terrain* terrain_value)
+void HexBoardSpace::TerrainData(Terrain* terrain_value)
 {
 	pTerrain = terrain_value;
 }
 
-Terrain* HexBoardSpace::terrain()
+Terrain* HexBoardSpace::TerrainData()
 {
 	return pTerrain;
 }
 
-void HexBoardSpace::creature(Creature* creature_value)
+void HexBoardSpace::CreatureData(Creature* creature_value)
 {
 	pCreature = creature_value;
 }
 
-Creature* HexBoardSpace::creature()
+Creature* HexBoardSpace::CreatureData()
 {
 	return pCreature;
 }
 
-void HexBoardSpace::player(Player* player_value)
+void HexBoardSpace::PlayerData(Player* player_value)
 {
 	pPlayer = player_value;
 }
 
-Player* HexBoardSpace::player()
+Player* HexBoardSpace::PlayerData()
 {
 	return pPlayer;
 }
