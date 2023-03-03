@@ -28,13 +28,13 @@ Terrain::~Terrain() {
 
 }
 
-void Terrain::Set_Terrain(Terrain::TERRAIN_TYPE type) {
+void Terrain::TerrainData(Terrain::TERRAIN_TYPE type) {
 
 	m_terrain_type = type;
 
 }
 
-Terrain::TERRAIN_TYPE Terrain::Get_Terrain() {
+Terrain::TERRAIN_TYPE Terrain::TerrainData() {
 
 	return m_terrain_type;
 }

@@ -32,8 +32,8 @@ public:
 	Terrain();
 	~Terrain();
 
-	void Set_Terrain(TERRAIN_TYPE type);
-	TERRAIN_TYPE Get_Terrain();
+	void TerrainData(TERRAIN_TYPE type);
+	TERRAIN_TYPE TerrainData();
 
 
 
