@@ -31,3 +31,23 @@ private:
 
 };
 
+/*Beholder
+Dragon (any color or type)
+Mind Flayer
+Orc
+Goblin
+Troll
+Giant (any type)
+Kobold
+Medusa
+Basilisk
+Hydra
+Chimera
+Manticore
+Gelatinous Cube
+Rust Monster
+Mimic
+Gargoyle
+Harpy
+Minotaur
+Skeleton*/
