@@ -128,18 +128,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Card.cpp" />
     <ClCompile Include="Clash.cpp" />
     <ClCompile Include="Clash2023.cpp" />
+    <ClCompile Include="ColorText.cpp" />
     <ClCompile Include="CommandLine.cpp" />
     <ClCompile Include="Creature.cpp" />
+    <ClCompile Include="Deck.cpp" />
     <ClCompile Include="HexBoardSpace.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Card.h" />
     <ClInclude Include="Clash.h" />
+    <ClInclude Include="ColorText.h" />
     <ClInclude Include="CommandLine.h" />
     <ClInclude Include="Creature.h" />
+    <ClInclude Include="Deck.h" />
     <ClInclude Include="HexBoardSpace.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Terrain.h" />

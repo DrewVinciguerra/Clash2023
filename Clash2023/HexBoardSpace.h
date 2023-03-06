@@ -6,15 +6,15 @@
 class HexBoardSpace
 {
 public:
+	void CreatureData(Creature* creature_value);
+	Creature* CreatureData();
+
 	HexBoardSpace();
 	void Name(std::string);
 	std::string Name();
 
 	void TerrainData(Terrain* terrain_value);
 	Terrain* TerrainData();
-
-	void CreatureData(Creature* creature_value);
-	Creature* CreatureData();
 
 	void PlayerData(Player* player_value);
 	Player* PlayerData();

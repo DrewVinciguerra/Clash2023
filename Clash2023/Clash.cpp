@@ -160,7 +160,9 @@ void Clash::DumpScreenData() {
 			if (p_player_data) {
 				std::string player_name = p_player_data->Name();
 				std::string worker_str = CreateHexLine(player_name, hex_width);
-				std::cout << worker_str << standard_spacing;
+				PlayerColorPrint(p_player_data->Id(), worker_str);
+				std::cout << standard_spacing;
+//				std::cout << worker_str << standard_spacing;
 			}
 			else {
 				std::string worker_str = CreateHexLine("", hex_width);
@@ -208,10 +210,42 @@ void Clash::DumpScreenData() {
 			Terrain* p_terrain_data = hex_board_array[x][y].TerrainData();
 
 			if (p_terrain_data) {
-//				Terrain::TERRAIN_TYPE tt = p_terrain_data->Get_Terrain();
+				Terrain::TERRAIN_TYPE ttype = p_terrain_data->TerrainData();
 				std::string Terrain_name = p_terrain_data->TerrainName();
 				std::string worker_str = CreateHexLine(Terrain_name, hex_width);
-				std::cout << worker_str << standard_spacing;
+				int player_id = 0;
+
+				switch (ttype)	{
+				case Terrain::PLAYER_1_STARTING_LAND:
+				case Terrain::PLAYER_1_SUMMONING:
+				case Terrain::PLAYER_1_MANA_SOURCE:
+					player_id = 1;
+					break;
+				case Terrain::PLAYER_2_STARTING_LAND:
+				case Terrain::PLAYER_2_SUMMONING:
+				case Terrain::PLAYER_2_MANA_SOURCE:
+					player_id = 2;
+					break;
+				case Terrain::PAVED:
+				case Terrain::MOUNTAIN:
+				case Terrain::WATER:
+				case Terrain::MUD:
+				case Terrain::LAVA:
+				case Terrain::GRASS:
+				case Terrain::DESERT:
+				case Terrain::SWAMP:
+				case Terrain::EMPTY:
+				case Terrain::TUNNEL:
+					player_id = 0;
+					break;
+				default:
+					player_id = 0;
+					break;
+				}
+
+				PlayerColorPrint(player_id, worker_str);
+				std::cout << standard_spacing;
+				//std::cout << worker_str << standard_spacing;
 			}
 			else {
 				std::string worker_str = CreateHexLine("", hex_width);
@@ -238,6 +272,23 @@ void Clash::DumpScreenData() {
 	}
 
 }
+
+void Clash::PlayerColorPrint(int player_id, std::string text) {
+	ColorText::ColorCode player_1_color = ColorText::ColorCode::FG_YELLOW;
+	ColorText::ColorCode player_2_color = ColorText::ColorCode::FG_GREEN;
+	ColorText::ColorCode default_color = ColorText::ColorCode::FG_WHITE;
+
+	if (player_id == 0) {
+		color_text.PrintToScreen(text, default_color, 1);
+	}
+	if (player_id == 1) {
+		color_text.PrintToScreen(text, player_1_color, 1);
+	}
+	if (player_id == 2) {
+		color_text.PrintToScreen(text, player_2_color, 1);
+	}
+}
+
 
 std::string Clash::CreateHexLine(std::string centered_str, int total_length) {
 	std::string retval = "";
@@ -372,12 +423,12 @@ bool Clash::Odd(int value) {
 
 }
 
-void Clash::AddPlayer(std::string name, int player_number)
+void Clash::AddPlayer(std::string name, int player_id)
 {
-	// TODO: Add your implementation code here.
+	// TODO: Make sure the ID hasn't already been used.
 	Player* current_player = new Player;
 	current_player->Name(name);
-	current_player->PlayerNumber(player_number);
+	current_player->Id(player_id);
 	player_vector.push_back(*current_player);
 }
 
@@ -388,5 +439,10 @@ std::vector<Player>* Clash::Players() {
 void Clash::PlacePlayerOnBoard(int x, int y, Player* target_player) {
 
 	hex_board_array[x][y].PlayerData(target_player);
+
+}
+
+
+void Clash::PlayCreature(std::string name, int attack, int health) {
 
 }
