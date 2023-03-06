@@ -23,6 +23,7 @@ int Clash::SetupClash()
 	for (int y = 0; y < BOARD_HEIGHT; y++) {
 		for (int x = 0; x < BOARD_WIDTH; x++) {
 			std::string dum = std::format("{}-{}", x, y);
+			//std::string dum = "fix me";
 			hex_board_array[x][y].Name(dum);
 
 			if (x == 2 && y == 1) {

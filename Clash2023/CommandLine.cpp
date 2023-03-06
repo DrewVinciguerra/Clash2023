@@ -59,13 +59,6 @@ void CommandLine::start() {
     std::cout << "[:] ds to see the current board [:]\n";
     std::cout << "[:] =========================== [:]\n";
 
-    std::cout << "\033[1;31mbold red text\033[0m\n";
-    std::cout << "\033[0;31mbold red text\033[0m\n";
-
-
-    ColorText ct;
-    ct.PrintToScreen("Color Test Print", ColorText::BG_GREEN, true);
-
     bool run_main_command_loop = true;
 
 
