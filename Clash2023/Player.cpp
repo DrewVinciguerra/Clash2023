@@ -44,3 +44,15 @@ int Player::HitPoints() {
 int Player::PlayerNumber() {
 	return player_number;
 }*/
+
+std::vector<Creature>* Player::CreatureVector() {
+	return &creature_vector;
+}
+
+void Player::SummoningLocation(int x, int y) {
+	summoning_location = std::make_pair(x, y);
+}
+
+std::pair<int, int> Player::SummoningLocation() {
+	return summoning_location;
+}

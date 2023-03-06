@@ -18,7 +18,9 @@ public:
 	std::vector<Player>* Players();
 	void PlacePlayerOnBoard(int x, int y, Player* target_player);
 	void AddPlayer(std::string name, int player_number);
-	void PlayCreature(std::string name, int attack, int health);
+	void PlayCreature(std::string name, int attack, int health, int player_id);
+	void NextTurn();
+
 
 private:
 	enum BOARD

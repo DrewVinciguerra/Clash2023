@@ -3,7 +3,6 @@
 
 Clash::Clash()
 {     // Constructor
-	std::cout << "Clash Constructor\n";
 	test_setupClash();
 	SetupClash();
 
@@ -40,7 +39,7 @@ int Clash::SetupClash()
 				terrain_vector.push_back(*p_worker_terrain);
 				hex_board_array[x][y].TerrainData(p_worker_terrain);
 			} 
-			else if (x == 3 && y == 1) {
+/*			else if (x == 3 && y == 1) {
 				// Set Player 1 Summoning
 				Terrain* p_worker_terrain = new Terrain();
 				p_worker_terrain->TerrainData(Terrain::PLAYER_1_SUMMONING);
@@ -53,8 +52,8 @@ int Clash::SetupClash()
 				p_worker_terrain->TerrainData(Terrain::PLAYER_2_SUMMONING);
 				terrain_vector.push_back(*p_worker_terrain);
 				hex_board_array[x][y].TerrainData(p_worker_terrain);
-			} 
-			else if (x == 0 && y == 0) {
+			} */
+			else if (x == 0 && y == 0) {	// ADD THIS CODE TO ADD PLAYER INSTEAD
 				// Set Player 1 Mana Source
 				Terrain* p_worker_terrain = new Terrain();
 				p_worker_terrain->TerrainData(Terrain::PLAYER_1_MANA_SOURCE);
@@ -185,9 +184,8 @@ void Clash::DumpScreenData() {
 			// todo get the rest of the values of the hex and display all the data.  Maybe each value from terrain is on a different line?? 
 
 			if (p_creature_value) {
-				//std::string player_name = p_creature_value->get_name();
-				std::string player_name = "";
-				std::string worker_str = CreateHexLine(player_name, hex_width);
+				std::string creature_name = p_creature_value->Name();
+				std::string worker_str = CreateHexLine(creature_name, hex_width);
 				std::cout << worker_str << standard_spacing;
 			}
 			else {
@@ -426,10 +424,33 @@ bool Clash::Odd(int value) {
 
 void Clash::AddPlayer(std::string name, int player_id)
 {
+	int x, y = 0;
+
 	// TODO: Make sure the ID hasn't already been used.
 	Player* current_player = new Player;
 	current_player->Name(name);
 	current_player->Id(player_id);
+
+	if (player_id == 1) {
+		// Set Player 1 Summoning
+		x = 3;
+		y = 1;
+		Terrain* p_worker_terrain = new Terrain();
+		p_worker_terrain->TerrainData(Terrain::PLAYER_1_SUMMONING);
+		terrain_vector.push_back(*p_worker_terrain);
+		hex_board_array[x][y].TerrainData(p_worker_terrain);
+	}
+	if (player_id == 2) {
+		// Set Player 1 Summoning
+		x = 3;
+		y = 5;
+		Terrain* p_worker_terrain = new Terrain();
+		p_worker_terrain->TerrainData(Terrain::PLAYER_2_SUMMONING);
+		terrain_vector.push_back(*p_worker_terrain);
+		hex_board_array[x][y].TerrainData(p_worker_terrain);
+	}
+
+	current_player->SummoningLocation(x, y);
 	player_vector.push_back(*current_player);
 }
 
@@ -444,6 +465,73 @@ void Clash::PlacePlayerOnBoard(int x, int y, Player* target_player) {
 }
 
 
-void Clash::PlayCreature(std::string name, int attack, int health) {
+void Clash::PlayCreature(std::string name, int attack, int health, int player_id) {
+
+	std::vector<Player>* my_players;
+	my_players = Players();
+	Player* p_player = NULL;
+
+//	std::cout << "\n---Who is summoning this creature?---\n";
+
+	for (Player& e : *my_players) {
+		if (e.Id() == player_id) {
+			p_player = &e;
+			break;
+		}
+	}
+
+	if (p_player) {
+		std::cout << "Player: " << p_player->Name() << " is summoning: " << name <<  "\n";
+		std::cout << "----------\n";
+
+		int attack_range_close = 1;
+		int attack_range_far = 1;
+		int movement = 1;
+		int player_target_id = 2;
+
+		std::pair<int, int> summoning_pair = p_player->SummoningLocation();
+
+		int x = summoning_pair.first;
+		int y = summoning_pair.second;
+		Creature* p_creature = new Creature(name, health, attack_range_close, attack_range_far, movement, player_id, player_target_id, x, y);
+
+		std::vector<Creature>* p_creature_vector = p_player->CreatureVector();
+
+		p_creature_vector->push_back(*p_creature);
+		hex_board_array[x][y].CreatureData(p_creature);
+
+
+
+	}
+	else {
+		std::cout << "ERROR:  Couldn't find player.\n";
+	}
+}
+
+void Clash::NextTurn() {
+	// This function loops through each player and moves it's creatures.
+
+	std::cout << "\n\n===========================\n";
+
+	std::cout << "Starting Next Turn\n \n";
+
+	std::vector<Player>* my_players;
+	my_players = Players();
+	Player* p_player = NULL;
+
+	for (Player& p : *my_players) {
+		std::cout << "Processing Player: " << p.Name() << "\n";
+
+		std::vector<Creature>* current_creature_vector = p.CreatureVector();
+
+
+		for (Creature& c : *current_creature_vector) {
+			std::cout << "Processing Creature: " << c.Name() << "\n";
+
+		}
+	}
+
+	std::cout << "\nNext Turn is complete. \n";
+	std::cout << "=========================== \n\n";
 
 }

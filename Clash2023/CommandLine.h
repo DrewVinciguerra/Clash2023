@@ -55,6 +55,7 @@ private:
 	void SetupBoard(Clash*);
 
 	void PlayCreature(Clash* myClash);
+	void NextTurn(Clash* myClash);
 
 
 

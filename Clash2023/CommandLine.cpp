@@ -33,6 +33,10 @@ CommandLine::CommandLine() {
     commands_map["sb"] = SETUP_BOARD;
     commands_map["boot_game"] = BOOT_GAME;
     commands_map["bg"] = BOOT_GAME;
+    commands_map["play_creature"] = PLAY_CREATURE;
+    commands_map["pc"] = PLAY_CREATURE;
+    commands_map["next_turn"] = NEXT_TURN;
+    commands_map["nt"] = NEXT_TURN;
 
     commands_map["unknown"] = UNKNOWN;
 };
@@ -55,6 +59,10 @@ void CommandLine::start() {
     std::cout << "[:]       s, ap1, ap2, sb       [:]\n";
     std::cout << "[:]  - - - - - - - - - - - - -  [:]\n";
     std::cout << "[:]    bg does all of those     [:]\n";
+    std::cout << "[:] =========================== [:]\n\n";
+    std::cout << "[:] =========================== [:]\n";
+    std::cout << "[:]  Next set of commands       [:]\n";
+    std::cout << "[:]       pc, nt                [:]\n";
     std::cout << "[:]  - - - - - - - - - - - - -  [:]\n";
     std::cout << "[:] ds to see the current board [:]\n";
     std::cout << "[:] =========================== [:]\n";
@@ -219,10 +227,9 @@ void CommandLine::start() {
             std::cout << "Not implimented\n";
             break;
         case NEXT_TURN:
-            std::cout << "Not implimented\n";
+            NextTurn(myClash);
             break;
         case PLAY_CREATURE:
-            std::cout << "PLAY CREATURE\n";
             PlayCreature(myClash);
             break;
         case GENERATE_RANDOM_CREATURE:
@@ -248,7 +255,7 @@ void CommandLine::PlayCreature(Clash* myClash) {
     std::cout << "PLAY CREATURE \n\n";
     if (myClash) {
 
-        std::vector<Player>* my_players;
+/*        std::vector<Player>* my_players;
         my_players = myClash->Players();
 
         std::cout << "\n---Who is summoning this creature?---\n";
@@ -258,9 +265,9 @@ void CommandLine::PlayCreature(Clash* myClash) {
             std::cout << "\n";
         }
         std::cout << "----------\n";
-
-
-//        myClash->PlayCreature("Super Orc", 1, 5);
+*/
+        int player_id = 1;
+        myClash->PlayCreature("Super Orc", 1, 5, player_id);
     }
     else {
         std::cout << "ERROR: Clash not started.\n>:";
@@ -270,7 +277,7 @@ void CommandLine::PlayCreature(Clash* myClash) {
 
 
 void CommandLine::AddPlayer1(Clash* myClash) {
-    std::cout << "ADD PLAYER 1\n\n";
+    std::cout << "ADD PLAYER 1\n";
     if (myClash) {
         myClash->AddPlayer("Andrea", 1);
     }
@@ -281,9 +288,9 @@ void CommandLine::AddPlayer1(Clash* myClash) {
 }
 
 void CommandLine::AddPlayer2(Clash* myClash) {
-    std::cout << "ADD PLAYER 2\n\n";
+    std::cout << "ADD PLAYER 2\n";
     if (myClash) {
-        myClash->AddPlayer("Billy", 2);
+        myClash->AddPlayer("Bobo", 2);
     }
     else {
         std::cout << "ERROR: Clash not started.\n>:";
@@ -291,7 +298,7 @@ void CommandLine::AddPlayer2(Clash* myClash) {
 }
 
 void CommandLine::AddPlayer(Clash* myClash) {
-    std::cout << "ADD PLAYER\n\n";
+    std::cout << "ADD PLAYER\n";
     if (myClash) {
         std::vector<Player>* p_player_vec = myClash->Players();
         int player_id = (int)p_player_vec->size();
@@ -382,3 +389,12 @@ CommandLine::COMMANDS CommandLine::commandId(std::string command)
 }
 
 
+void CommandLine::NextTurn(Clash* myClash) {
+    if (myClash) {
+        myClash->NextTurn();
+    }
+    else {
+        std::cout << "ERROR: Clash not started.\n";
+    }
+
+}

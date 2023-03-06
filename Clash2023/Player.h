@@ -16,6 +16,9 @@ public:
 	int HitPoints();
 //	void PlayerNumber(int number);
 //	int PlayerNumber();
+	std::vector<Creature>* CreatureVector();
+	void SummoningLocation(int x, int y);
+	std::pair<int, int> SummoningLocation();
 
 
 private:
@@ -27,6 +30,8 @@ private:
 
 	//  Make a vector that holds a deck of cards and use std::random_shuffle or std::shuffle 
 	std::vector<Creature> creature_vector;
+
+	std::pair<int, int> summoning_location;
 
 
 };
