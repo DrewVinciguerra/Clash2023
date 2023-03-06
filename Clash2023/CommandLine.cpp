@@ -5,6 +5,7 @@
 //#include <vector>
 
 #include "CommandLine.h"
+#include "ColorText.h"
 
 
 CommandLine::CommandLine() {
@@ -58,8 +59,13 @@ void CommandLine::start() {
     std::cout << "[:] ds to see the current board [:]\n";
     std::cout << "[:] =========================== [:]\n";
 
+    std::cout << "\033[1;31mbold red text\033[0m\n";
+    std::cout << "\033[0;31mbold red text\033[0m\n";
 
-    
+
+    ColorText ct;
+    ct.PrintToScreen("Color Test Print", ColorText::BG_GREEN, true);
+
     bool run_main_command_loop = true;
 
 
@@ -213,13 +219,61 @@ void CommandLine::start() {
             std::cout << "ERROR: Unknown command.\n";
             break;
 
+        case END_TURN_PLAYER_1:
+            std::cout << "Not implimented\n";
+            break;
+        case END_TURN_PLAYER_2:
+            std::cout << "Not implimented\n";
+            break;
+        case NEXT_TURN:
+            std::cout << "Not implimented\n";
+            break;
+        case PLAY_CREATURE:
+            std::cout << "PLAY CREATURE\n";
+            PlayCreature(myClash);
+            break;
+        case GENERATE_RANDOM_CREATURE:
+            std::cout << "Not implimented\n";
+            break;
+        case GAME_STATUS:
+            std::cout << "Not implimented\n";
+            break;
+        case PLAYER_INFO:
+            std::cout << "Not implimented\n";
+            break;
+
+
         }
-        
+
+
     }
 
 
 }
 
+void CommandLine::PlayCreature(Clash* myClash) {
+    std::cout << "PLAY CREATURE \n\n";
+    if (myClash) {
+
+        std::vector<Player>* my_players;
+        my_players = myClash->Players();
+
+        std::cout << "\n---Who is summoning this creature?---\n";
+
+        for (Player& e : *my_players) {
+            std::cout << "Player Name:\t" << e.Name() << "\n";
+            std::cout << "\n";
+        }
+        std::cout << "----------\n";
+
+
+//        myClash->PlayCreature("Super Orc", 1, 5);
+    }
+    else {
+        std::cout << "ERROR: Clash not started.\n>:";
+    }
+
+}
 
 
 void CommandLine::AddPlayer1(Clash* myClash) {
@@ -247,16 +301,16 @@ void CommandLine::AddPlayer(Clash* myClash) {
     std::cout << "ADD PLAYER\n\n";
     if (myClash) {
         std::vector<Player>* p_player_vec = myClash->Players();
-        int player_count = (int)p_player_vec->size();
-        player_count++;
-        std::cout << "Adding player #" << player_count << "\n\n";
+        int player_id = (int)p_player_vec->size();
+        player_id++;
+        std::cout << "Adding player #" << player_id << "\n\n";
         std::cout << "Enter player's name: ";
         std::string name = "no name";
         std::cin >> name;
 
-        std::cout << "\n Adding " << name << " as player #" << player_count << "\n\n";
+        std::cout << "\n Adding " << name << " as player #" << player_id << "\n\n";
 
-        myClash->AddPlayer(name, player_count);
+        myClash->AddPlayer(name, player_id);
     }
     else {
         std::cout << "ERROR: Clash not started.\n>:";
@@ -275,7 +329,7 @@ void CommandLine::SetupBoard(Clash* myClash) {
 
         for (Player& e : *p_myplayers) {
             std::cout << "Placing player: " << e.Name() << " on the board.\n";
-            int pn = e.PlayerNumber();
+            int pn = e.Id();
 
             if (pn == 1) {
                 myClash->PlacePlayerOnBoard(2, 1, &e);
