@@ -18,11 +18,14 @@ Creature::Creature(std::string name_value, int health_value, int attack_range_cl
 
 	// I need a way to mark a target for this creature to travel to and/or attack
 	// A creature could either want to travel to the other player, a specific creature or just a hex.
-	int player_target_id = player_target_id_value;
-	int creature_target_id = 0;
-	int hex_target_id = 0;
+	player_target_id = player_target_id_value;
+	creature_target_id = 0;
+	hex_target_id = 0;
 
 	id = 1;	// Use a static to control this id?  Trying to avoid GUIDS if possible 
+
+	this->x = x;
+	this->y = y;
 }
 
 

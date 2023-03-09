@@ -6,6 +6,9 @@ HexBoardSpace::HexBoardSpace()
 	pPlayer = NULL;
 	pTerrain = NULL;
 	m_name = "Blank";
+	x = -1;
+	y = -1;
+
 }
 
 

@@ -40,6 +40,45 @@ public:
 	Creature(std::string name, int health, int attack_range_close, int attack_range_far, int movement, int controler_id, int player_target_id, int x, int y);
 	~Creature();
 	std::string Name();
+
+	// Accessors
+	std::string Name() const { return name; }
+	int Health() const { return health; }
+	int AttackRangeClose() const { return attack_range_close; }
+	int AttackRangeFar() const { return attack_range_far; }
+	int Shield() const { return shield; }
+	int Movement() const { return movement; }
+	bool isFlying() const { return flying; }
+	bool isAggressive() const { return aggressive; }
+	bool isDefensive() const { return defensive; }
+	bool isOpportunistic() const { return opportunistic; }
+	int ControllerId() const { return controler_id; }
+	int PlayerTargetId() const { return player_target_id; }
+	int CreatureTargetId() const { return creature_target_id; }
+	int HexTargetId() const { return hex_target_id; }
+	int Id() const { return id; }
+	int X() const { return x; }
+	int Y() const { return y; }
+
+
+	// Mutators
+	void Name(std::string name) { this->name = name; }
+	void Health(int health) { this->health = health; }
+	void AttackRangeClose(int attack_range_close) { this->attack_range_close = attack_range_close; }
+	void AttackRangeFar(int attack_range_far) { this->attack_range_far = attack_range_far; }
+	void Shield(int shield) { this->shield = shield; }
+	void Movement(int movement) { this->movement = movement; }
+	void Flying(bool flying) { this->flying = flying; }
+	void Aggressive(bool aggressive) { this->aggressive = aggressive; }
+	void Defensive(bool defensive) { this->defensive = defensive; }
+	void Opportunistic(bool opportunistic) { this->opportunistic = opportunistic; }
+	void ControllerId(int controller_id) { this->controler_id = controller_id; }
+	void PlayerTargetId(int player_target_id) { this->player_target_id = player_target_id; }
+	void CreatureTargetId(int creature_target_id) { this->creature_target_id = creature_target_id; }
+	void HexTargetId(int hex_target_id) { this->hex_target_id = hex_target_id; }
+	void Id(int id) { this->id = id; }
+	void X(int x) { this->x = x; }
+	void Y(int y) { this->y = y; }
 };
 
 /*Beholder
