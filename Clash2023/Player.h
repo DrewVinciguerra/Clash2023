@@ -3,6 +3,7 @@
 //#include <combaseapi.h>
 #include <vector>
 #include "Creature.h"
+#include "Deck.h"
 
 class Player
 {
@@ -29,6 +30,7 @@ private:
 //	int player_number;	//1st player, 2nd player, etc
 
 	//  Make a vector that holds a deck of cards and use std::random_shuffle or std::shuffle 
+	std::vector<Deck> deck_vector;
 	std::vector<Creature> creature_vector;
 
 	std::pair<int, int> summoning_location;

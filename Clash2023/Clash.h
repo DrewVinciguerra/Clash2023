@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <map>
+#include <set>
 
 #include "Creature.h"
 #include "Player.h"
@@ -29,16 +31,37 @@ private:
 		BOARD_HEIGHT = 7
 	};
 
+	enum TRAVEL_DIRECTION
+	{
+		NE,
+		E,
+		SE,
+		SW,
+		W,
+		NW,
+	};
+
+
 	bool Odd(int);
 	std::string StringOfChars(std::string& dest, std::string value, int length);
 	std::string CreateHexLine(std::string str, int length);
 	void PlayerColorPrint(int player_id, std::string text);
+	void GeneratePath(std::pair<int, int> current_location, Creature& pCreature, std::vector<std::pair<int, int>>& current_path);
+	HexBoardSpace* Travel(std::pair<int, int> current_location, Creature& creature, TRAVEL_DIRECTION direction, bool& found_target);
 
 	int int_board_array[BOARD_WIDTH][BOARD_HEIGHT];
 	HexBoardSpace hex_board_array[BOARD_WIDTH][BOARD_HEIGHT];
  	std::vector<Player> player_vector;
 	std::vector<Terrain> terrain_vector;
 	ColorText color_text;
+
+	// Path finding vars
+	bool first_path;
+	std::vector<std::pair<int, int>> best_path_vector;
+
+	void AddPairs(std::pair<int, int> p1, std::pair<int, int> p2, std::pair<int, int>& new_location);
+	void SubtractPairs(std::pair<int, int> p1, std::pair<int, int> p2, std::pair<int, int>& new_location);
+	void PrintMiniMap(std::vector<std::pair<int, int>>& current_path);
 
 
 public:
