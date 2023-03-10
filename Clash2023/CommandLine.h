@@ -32,12 +32,15 @@ private:
 
 		// GAME PLAY COMMANDS
 		DUMPSCREEN,
+		NEXT_TURN,
+		PLAY_CREATURE,
+
+		//Debug Stuff
+		DEBUG_TEST,
 
 		// IMPLIMENT THESE COMMANDS
 		END_TURN_PLAYER_1,
 		END_TURN_PLAYER_2,
-		NEXT_TURN,
-		PLAY_CREATURE,
 		GENERATE_RANDOM_CREATURE,
 		GAME_STATUS,	// What state is the game in?  Waiting on which players?  Turn count. etc.
 		PLAYER_INFO,	// All player info.  Hit points, deck, discard, etc.
@@ -56,6 +59,7 @@ private:
 
 	void PlayCreature(Clash* myClash);
 	void NextTurn(Clash* myClash);
+	void DebugTest(Clash* myClash);
 
 
 
