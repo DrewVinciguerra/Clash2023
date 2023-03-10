@@ -37,6 +37,9 @@ CommandLine::CommandLine() {
     commands_map["pc"] = PLAY_CREATURE;
     commands_map["next_turn"] = NEXT_TURN;
     commands_map["nt"] = NEXT_TURN;
+    commands_map["debug_test"] = DEBUG_TEST;
+    commands_map["dt"] = DEBUG_TEST;
+    
 
     commands_map["unknown"] = UNKNOWN;
 };
@@ -229,6 +232,9 @@ void CommandLine::start() {
         case NEXT_TURN:
             NextTurn(myClash);
             break;
+        case DEBUG_TEST:
+            DebugTest(myClash);
+            break;
         case PLAY_CREATURE:
             PlayCreature(myClash);
             break;
@@ -398,3 +404,14 @@ void CommandLine::NextTurn(Clash* myClash) {
     }
 
 }
+
+void CommandLine::DebugTest(Clash* myClash) {
+    if (myClash) {
+        myClash->DebugTest();
+    }
+    else {
+        std::cout << "ERROR: Clash not started.\n";
+    }
+
+}
+

@@ -541,46 +541,137 @@ void Clash::NextTurn() {
 			std::pair<int, int> current_location = { c.X(), c.Y() };
 			GeneratePath(current_location, c, path_vector);
 
+			std::cout << "This is the best path for the current Creature: " << c.Name() << "\n";
+			PrintMiniMap(best_path_vector);
+
+			//Move creature along path
+			MoveCreature(c, best_path_vector);
 		}
 	}
+
 
 	std::cout << "\nNext Turn is complete. \n";
 	std::cout << "=========================== \n\n";
 
 }
-void Clash::GeneratePath(std::pair<int, int> current_location, Creature& creature, std::vector<std::pair<int, int>>& current_path) {
+
+void Clash::MoveCreature(Creature c, std::vector<std::pair<int, int>> path_vector) {
+}
+
+void Clash::DebugTest() {
+	std::cout << "\nRunning Debug Test. \n";
+
+//	std::vector<std::pair<int, int>> current_path;
+//	first_path = false;
+//	TestGeneratePath(6, current_path);
+
+	std::list<int> current_path = {};
+	first_path = false;
+	Test2GeneratePath(6, current_path);
+
+
+}
+
+void Clash::Test2GeneratePath(int value, std::list<int>current_path) {
+
+
+	//PrintMiniMap(current_path);
+
+	for (int td = 0; td < 3; td++) {
+
+		if (current_path.size() > 6) {
+			first_path = true;
+		}
+
+		if (first_path) {
+			break;
+		}
+		else {
+			//ADD THIS X Y TO PATH VECTOR
+			int v = td;
+			current_path.push_back(v);
+			std::cout << "pushing location on to vector. size: " << current_path.size() << "\n";
+			Test2GeneratePath(6, current_path);
+			std::cout << "GeneratePath returned. size: " << current_path.size() << "\n";
+
+		}
+
+
+	}
+
+	// We hit a dead end.
+//	std::cout << "Pre pop size: " << current_path.size() << "\n";
+//	current_path.pop_back();
+//	std::cout << "popping location off of current path.  New size: " << current_path.size() << "\n";
+
+}
+
+void Clash::TestGeneratePath(int value, std::vector<std::pair<int, int>>& current_path) {
+
+
+	//PrintMiniMap(current_path);
+
+	for (int td = 0; td < 6; td++) {
+
+
+		//ADD THIS X Y TO PATH VECTOR
+		current_path.push_back(std::pair<int,int>{td, td});
+		std::cout << "pushing location on to vector. size: " << current_path.size() << "\n";
+
+		if (current_path.size() > 6) {
+			first_path = true;
+		}
+
+		if (first_path) {
+			break;
+		}
+
+		TestGeneratePath(6, current_path);
+		std::cout << "GeneratePath returned. size: " << current_path.size() << "\n";
+
+	}
+
+	// We hit a dead end.
+	std::cout << "Pre pop size: " << current_path.size() << "\n";
+	current_path.pop_back();
+	std::cout << "popping location off of current path.  New size: " << current_path.size() << "\n";
+
+}
+
+
+void Clash::GeneratePath(std::pair<int, int> current_location, Creature& creature, std::vector<std::pair<int, int>> current_path) {
 	//Try to travel in each direction
 	HexBoardSpace* p_hex = NULL;
 	bool found_target = false;
 
-	std::cout << "GeneratePath: Current Location " << current_location.first << ", " << current_location.second << "\n";
+	//std::cout << "GeneratePath: Current Location " << current_location.first << ", " << current_location.second << "\n";
 
-	//PrintMiniMap(current_path);
+//	PrintMiniMap(current_path);
 
 	for (int td = NE; td <= NW; td++) {
 		TRAVEL_DIRECTION my_travel_direction = static_cast<TRAVEL_DIRECTION>(td);
 
-/*		if (current_location == std::pair<int, int>{4, 0})
-		{
-			std::cout << "HERE";
-		}*/
-/*	if (current_location == std::pair<int, int>{4, 1})
-		{
-			std::cout << "HERE";
-		}*/
+		/*		if (current_location == std::pair<int, int>{4, 0})
+				{
+					std::cout << "HERE";
+				}*/
+				/*	if (current_location == std::pair<int, int>{4, 1})
+						{
+							std::cout << "HERE";
+						}*/
 
 		p_hex = Travel(current_location, creature, my_travel_direction, found_target);
 		if (found_target) {
-			PrintMiniMap(current_path);
+			//PrintMiniMap(current_path);
 
-			std::cout << "We found the creature's target player\n"; 
+			std::cout << "We found the creature's target player\n";
 			if (first_path) {
-				std::cout << "Setting the best path for the first time\n"; 
+				std::cout << "Setting the best path for the first time\n";
 				first_path = false;
 				best_path_vector = current_path;
 			}
 			else {
-				std::cout << "Found a new path.  Is it better?\n"; 
+				std::cout << "Found a new path.  Is it better?\n";
 				int best_path_size = (int)best_path_vector.size();
 				int current_path_size = (int)current_path.size();
 				std::cout << "Best path size: " << best_path_size << "\n";
@@ -591,7 +682,7 @@ void Clash::GeneratePath(std::pair<int, int> current_location, Creature& creatur
 				}
 
 			}
-			break;	//Break out of for loop.  We are done.
+			return;	//Break out of for loop.  We are done.
 		}
 		else {
 			if (p_hex) {
@@ -602,30 +693,40 @@ void Clash::GeneratePath(std::pair<int, int> current_location, Creature& creatur
 					std::pair<int, int> new_location{ p_hex->LocationX(), p_hex->LocationY() };
 					//ADD THIS X Y TO PATH VECTOR
 					current_path.push_back(new_location);
-					std::cout << "pushing location on to vector. size: " << current_path.size() << "\n";
+					//std::cout << "pushing location on to vector. size: " << current_path.size() << "\n";
+					//PrintMiniMap(current_path);
 
 					//If this current path is already longer than our best path, bail.
 					if (first_path == false && (current_path.size() >= best_path_vector.size())) {
-						break;
+						return;
 					}
 
 					GeneratePath(new_location, creature, current_path);
-					std::cout << "GeneratePath returned. size: " << current_path.size() << "\n";
+					//std::cout << "Pre pop size: " << current_path.size() << "\n";
+					current_path.pop_back();
+					//std::cout << "popping location off of current path.  New size: " << current_path.size() << "\n";
+					//PrintMiniMap(current_path);
 
+				}
+				else {
+					//This hex is already in the list.  .
+					//return;
 				}
 			}
 		}
 	}
 
 	// We hit a dead end.
-	std::cout << "Pre pop size: " << current_path.size() << "\n";
-	current_path.pop_back();
-	std::cout << "popping location off of current path.  New size: " << current_path.size() << "\n";
+//	std::cout << "Pre pop size: " << current_path.size() << "\n";
+//	current_path.pop_back();
+//	std::cout << "popping location off of current path.  New size: " << current_path.size() << "\n";
 
-
+	return;
 
 
 }
+
+
 
 HexBoardSpace* Clash::Travel(std::pair<int, int> current_location, Creature& creature, TRAVEL_DIRECTION direction, bool& found_target) {
 	// Returns a valid HexBoardSpace if the move is valid.  Otherwise HexBoardSpace is NULL.
@@ -676,14 +777,14 @@ HexBoardSpace* Clash::Travel(std::pair<int, int> current_location, Creature& cre
 		Player* p_player = p_hex->PlayerData();
 		Terrain* p_terrain = p_hex->TerrainData();
 
-		if (p_creature) {
-			std::cout << "=============== There is a Creature here: " << p_creature->Name() << "\n";
-		}
+//		if (p_creature) {
+//			std::cout << "=============== There is a Creature here: " << p_creature->Name() << "\n";
+//		}
 
 		if (p_player) {
 			// Did we find the creatures target?
 			if (creature.PlayerTargetId() == p_player->Id()) {
-				std::cout << "=============== Creature found the target player\n";
+				//std::cout << "=============== Creature found the target player\n";
 				found_target = true;
 			}
 		}

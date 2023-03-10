@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <list>
 
 #include "Creature.h"
 #include "Player.h"
@@ -22,6 +23,9 @@ public:
 	void AddPlayer(std::string name, int player_number);
 	void PlayCreature(std::string name, int attack, int health, int player_id);
 	void NextTurn();
+	void DebugTest();
+	void MoveCreature(Creature c, std::vector<std::pair<int, int>> path_vector);
+
 
 
 private:
@@ -46,7 +50,12 @@ private:
 	std::string StringOfChars(std::string& dest, std::string value, int length);
 	std::string CreateHexLine(std::string str, int length);
 	void PlayerColorPrint(int player_id, std::string text);
-	void GeneratePath(std::pair<int, int> current_location, Creature& pCreature, std::vector<std::pair<int, int>>& current_path);
+	void GeneratePath(std::pair<int, int> current_location, Creature& pCreature, std::vector<std::pair<int, int>> current_path);
+
+	//DEBUG STUFF
+	void TestGeneratePath(int value, std::vector<std::pair<int, int>>& current_path);
+	void Test2GeneratePath(int value, std::list<int> current_path);
+
 	HexBoardSpace* Travel(std::pair<int, int> current_location, Creature& creature, TRAVEL_DIRECTION direction, bool& found_target);
 
 	int int_board_array[BOARD_WIDTH][BOARD_HEIGHT];
