@@ -26,7 +26,6 @@ int Clash::SetupClash()
 	for (int y = 0; y < BOARD_HEIGHT; y++) {
 		for (int x = 0; x < BOARD_WIDTH; x++) {
 			std::string dum = std::format("{}-{}", x, y);
-			//std::string dum = "fix me";
 			hex_board_array[x][y].Name(dum);
 			hex_board_array[x][y].LocationX(x);
 			hex_board_array[x][y].LocationY(y);
@@ -45,34 +44,7 @@ int Clash::SetupClash()
 				terrain_vector.push_back(*p_worker_terrain);
 				hex_board_array[x][y].TerrainData(p_worker_terrain);
 			} 
-/*			else if (x == 3 && y == 1) {
-				// Set Player 1 Summoning
-				Terrain* p_worker_terrain = new Terrain();
-				p_worker_terrain->TerrainData(Terrain::PLAYER_1_SUMMONING);
-				terrain_vector.push_back(*p_worker_terrain);
-				hex_board_array[x][y].TerrainData(p_worker_terrain);
-			}
-			else if (x == 3 && y == 5) {
-				// Set Player 2 Summoning
-				Terrain* p_worker_terrain = new Terrain();
-				p_worker_terrain->TerrainData(Terrain::PLAYER_2_SUMMONING);
-				terrain_vector.push_back(*p_worker_terrain);
-				hex_board_array[x][y].TerrainData(p_worker_terrain);
-			} */
-			else if (x == 0 && y == 0) {	// ADD THIS CODE TO ADD PLAYER INSTEAD
-				// Set Player 1 Mana Source
-				Terrain* p_worker_terrain = new Terrain();
-				p_worker_terrain->TerrainData(Terrain::PLAYER_1_MANA_SOURCE);
-				terrain_vector.push_back(*p_worker_terrain);
-				hex_board_array[x][y].TerrainData(p_worker_terrain);
-			}
-			else if (x == 0 && y == 6) {
-				// Set Player 2 Mana Source
-				Terrain* p_worker_terrain = new Terrain();
-				p_worker_terrain->TerrainData(Terrain::PLAYER_2_MANA_SOURCE);
-				terrain_vector.push_back(*p_worker_terrain);
-				hex_board_array[x][y].TerrainData(p_worker_terrain);
-			}
+
 			else {
 				// Default to Grass
 				Terrain* p_worker_terrain = new Terrain();
@@ -446,6 +418,18 @@ void Clash::AddPlayer(std::string name, int player_id)
 		p_worker_terrain->TerrainData(Terrain::PLAYER_1_SUMMONING);
 		terrain_vector.push_back(*p_worker_terrain);
 		hex_board_array[x][y].TerrainData(p_worker_terrain);
+
+		current_player->SummoningLocation(x, y);
+		player_vector.push_back(*current_player);
+
+		// Set Player 1 Mana Source
+		x = 0;
+		y = 0;
+		p_worker_terrain = new Terrain();
+		p_worker_terrain->TerrainData(Terrain::PLAYER_1_MANA_SOURCE);
+		terrain_vector.push_back(*p_worker_terrain);
+		hex_board_array[x][y].TerrainData(p_worker_terrain);
+
 	}
 	if (player_id == 2) {
 		// Set Player 1 Summoning
@@ -455,11 +439,55 @@ void Clash::AddPlayer(std::string name, int player_id)
 		p_worker_terrain->TerrainData(Terrain::PLAYER_2_SUMMONING);
 		terrain_vector.push_back(*p_worker_terrain);
 		hex_board_array[x][y].TerrainData(p_worker_terrain);
+
+		current_player->SummoningLocation(x, y);
+		player_vector.push_back(*current_player);
+
+		// Set Player 2 Mana Source
+		x = 0;
+		y = 6;
+		p_worker_terrain = new Terrain();
+		p_worker_terrain->TerrainData(Terrain::PLAYER_2_MANA_SOURCE);
+		terrain_vector.push_back(*p_worker_terrain);
+		hex_board_array[x][y].TerrainData(p_worker_terrain);
+
 	}
 
-	current_player->SummoningLocation(x, y);
-	player_vector.push_back(*current_player);
 }
+
+
+/*/*			else if (x == 3 && y == 1) {
+				// Set Player 1 Summoning
+				Terrain* p_worker_terrain = new Terrain();
+				p_worker_terrain->TerrainData(Terrain::PLAYER_1_SUMMONING);
+				terrain_vector.push_back(*p_worker_terrain);
+				hex_board_array[x][y].TerrainData(p_worker_terrain);
+			}
+			else if (x == 3 && y == 5) {
+				// Set Player 2 Summoning
+				Terrain* p_worker_terrain = new Terrain();
+				p_worker_terrain->TerrainData(Terrain::PLAYER_2_SUMMONING);
+				terrain_vector.push_back(*p_worker_terrain);
+				hex_board_array[x][y].TerrainData(p_worker_terrain);
+			} */
+
+
+/*			else if (x == 0 && y == 0) {	// ADD THIS CODE TO ADD PLAYER INSTEAD
+				// Set Player 1 Mana Source
+				Terrain* p_worker_terrain = new Terrain();
+				p_worker_terrain->TerrainData(Terrain::PLAYER_1_MANA_SOURCE);
+				terrain_vector.push_back(*p_worker_terrain);
+				hex_board_array[x][y].TerrainData(p_worker_terrain);
+			}
+			else if (x == 0 && y == 6) {
+				// Set Player 2 Mana Source
+				Terrain* p_worker_terrain = new Terrain();
+				p_worker_terrain->TerrainData(Terrain::PLAYER_2_MANA_SOURCE);
+				terrain_vector.push_back(*p_worker_terrain);
+				hex_board_array[x][y].TerrainData(p_worker_terrain);
+			}*/
+
+
 
 std::vector<Player>* Clash::Players() {
 	return &player_vector;
@@ -498,8 +526,8 @@ void Clash::PlayCreature(std::string name, int attack, int health, int player_id
 
 		std::pair<int, int> summoning_pair = p_player->SummoningLocation();
 
-		int x = summoning_pair.first;
-		int y = summoning_pair.second;
+		int x = 4;	// summoning_pair.first;
+		int y = 2;	// summoning_pair.second;
 		Creature* p_creature = new Creature(name, health, attack_range_close, attack_range_far, movement, player_id, player_target_id, x, y);
 
 		std::vector<Creature>* p_creature_vector = p_player->CreatureVector();
@@ -522,6 +550,7 @@ void Clash::NextTurn() {
 
 	std::cout << "Starting Next Turn\n \n";
 
+	debug_interation_counter = 0;
 	std::vector<Player>* my_players;
 	my_players = Players();
 	Player* p_player = NULL;
@@ -537,6 +566,8 @@ void Clash::NextTurn() {
 
 		for (Creature& c : *current_creature_vector) {
 			std::cout << "Processing Creature: " << c.Name() << "\n";
+			best_path_vector.clear();
+			first_path = true;
 			std::vector<std::pair<int, int>> path_vector;
 			std::pair<int, int> current_location = { c.X(), c.Y() };
 			GeneratePath(current_location, c, path_vector);
@@ -555,7 +586,30 @@ void Clash::NextTurn() {
 
 }
 
-void Clash::MoveCreature(Creature c, std::vector<std::pair<int, int>> path_vector) {
+void Clash::MoveCreature(Creature &c, std::vector<std::pair<int, int>> path_vector) {
+	std::cout << "\nMoving Creature. \n";
+
+	// Remove creature from current hex
+	hex_board_array[c.X()][c.Y()].CreatureData(NULL);
+
+	// Add it to the new hex
+
+	// Find how far along the path this creature moves. Make sure the movement isn't greater than the path length.
+	int path_index = -1;
+	if (c.Movement() > path_vector.size()) {
+		path_index = (int)path_vector.size() - 1;
+	}
+	else {
+		path_index = c.Movement() - 1;
+	}
+
+	int new_x = path_vector[path_index].first;
+	int new_y = path_vector[path_index].second;
+	c.X(new_x);
+	c.Y(new_y);
+	hex_board_array[new_x][new_y].CreatureData(&c);
+
+
 }
 
 void Clash::DebugTest() {
@@ -646,7 +700,7 @@ void Clash::GeneratePath(std::pair<int, int> current_location, Creature& creatur
 
 	//std::cout << "GeneratePath: Current Location " << current_location.first << ", " << current_location.second << "\n";
 
-//	PrintMiniMap(current_path);
+	PrintMiniMap(current_path);
 
 	for (int td = NE; td <= NW; td++) {
 		TRAVEL_DIRECTION my_travel_direction = static_cast<TRAVEL_DIRECTION>(td);
@@ -662,7 +716,7 @@ void Clash::GeneratePath(std::pair<int, int> current_location, Creature& creatur
 
 		p_hex = Travel(current_location, creature, my_travel_direction, found_target);
 		if (found_target) {
-			//PrintMiniMap(current_path);
+			PrintMiniMap(current_path);
 
 			std::cout << "We found the creature's target player\n";
 			if (first_path) {
@@ -694,18 +748,22 @@ void Clash::GeneratePath(std::pair<int, int> current_location, Creature& creatur
 					//ADD THIS X Y TO PATH VECTOR
 					current_path.push_back(new_location);
 					//std::cout << "pushing location on to vector. size: " << current_path.size() << "\n";
-					//PrintMiniMap(current_path);
+					PrintMiniMap(current_path);
 
 					//If this current path is already longer than our best path, bail.
 					if (first_path == false && (current_path.size() >= best_path_vector.size())) {
 						return;
 					}
 
+					debug_interation_counter++;
+					if (debug_interation_counter == 14) { 
+						int i = 5; }
 					GeneratePath(new_location, creature, current_path);
 					//std::cout << "Pre pop size: " << current_path.size() << "\n";
-					current_path.pop_back();
+					//current_path.pop_back();
 					//std::cout << "popping location off of current path.  New size: " << current_path.size() << "\n";
-					//PrintMiniMap(current_path);
+					PrintMiniMap(current_path);
+					std::cout << ".\n";
 
 				}
 				else {
@@ -847,9 +905,14 @@ void Clash::PrintMiniMap(std::vector<std::pair<int, int>>& current_path) {
 			
 			// Is this space on the current path?
 			std::pair<int, int> test_location{ x, y };
+			std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::pair<int, int>>>> item_found = std::find(current_path.begin(), current_path.end(), test_location);
+			int index = item_found - current_path.begin();
 			if (std::find(current_path.begin(), current_path.end(), test_location) != current_path.end()) {
+				
 				// find the item
 				path_marker = "*";
+				std::string s = std::to_string(index);
+				path_marker = s;
 			}
 
 

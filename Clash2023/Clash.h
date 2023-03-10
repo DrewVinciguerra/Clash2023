@@ -24,7 +24,7 @@ public:
 	void PlayCreature(std::string name, int attack, int health, int player_id);
 	void NextTurn();
 	void DebugTest();
-	void MoveCreature(Creature c, std::vector<std::pair<int, int>> path_vector);
+	void MoveCreature(Creature& c, std::vector<std::pair<int, int>> path_vector);
 
 
 
@@ -77,5 +77,6 @@ public:
 	int test_setupClash();
 	void test_dumpScreenData();
 	void test_dumpScreenDataV2();
+	int debug_interation_counter;
 };
 
