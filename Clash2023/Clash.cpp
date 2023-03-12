@@ -594,7 +594,14 @@ void Clash::NextTurn() {
 			PrintMiniMap(best_path_vector);
 
 			//Move creature along path
- 			MoveCreature(c, best_path_vector);
+
+			if (best_path_vector.size() > 1) {
+				MoveCreature(c, best_path_vector);
+			}
+
+			//Look for targets to attack
+			std::vector<std::pair<int, int>> attack_targets;
+			CurrentAttackTargets(c, attack_targets);
 		}
 	}
 
@@ -603,6 +610,10 @@ void Clash::NextTurn() {
 	std::cout << "=========================== \n\n";
 
 }
+
+void Clash::CurrentAttackTargets(Creature& c, std::vector<std::pair<int, int>> attack_targets) {
+}
+
 
 void Clash::MoveCreature(Creature &c, std::vector<std::pair<int, int>> path_vector) {
 	std::cout << "\nMoving Creature. \n";

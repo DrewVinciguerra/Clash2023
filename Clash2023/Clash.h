@@ -74,6 +74,7 @@ private:
 	void SubtractPairs(std::pair<int, int> p1, std::pair<int, int> p2, std::pair<int, int>& new_location);
 	void PrintMiniMap(std::vector<std::pair<int, int>>& current_path);
 	Player* IsCreaturesTargetNear(std::pair<int, int> current_location, Creature& creature);
+	void CurrentAttackTargets(Creature& c, std::vector<std::pair<int, int>> attack_targets);
 
 
 public:
