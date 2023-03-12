@@ -543,8 +543,8 @@ void Clash::PlayCreature(std::string name, int attack, int health, int player_id
 
 		std::pair<int, int> summoning_pair = p_player->SummoningLocation();
 
-		int x = 4;	// summoning_pair.first;
-		int y = 2;	// summoning_pair.second;
+		int x = summoning_pair.first;
+		int y = summoning_pair.second;
 		Creature* p_creature = new Creature(name, health, attack_range_close, attack_range_far, movement, player_id, player_target_id, x, y);
 
 		std::vector<Creature>* p_creature_vector = p_player->CreatureVector();
@@ -587,13 +587,20 @@ void Clash::NextTurn() {
 			first_path = true;
 			std::vector<std::pair<int, int>> path_vector;
 			std::pair<int, int> current_location = { c.X(), c.Y() };
-			GeneratePath(current_location, c, path_vector);
+			path_vector.push_back(current_location);
+			GeneratePath(c, path_vector);
 
 			std::cout << "This is the best path for the current Creature: " << c.Name() << "\n";
 			PrintMiniMap(best_path_vector);
 
 			//Move creature along path
-			MoveCreature(c, best_path_vector);
+			if (best_path_vector.size() > 1) {
+				MoveCreature(c, best_path_vector);
+			}
+
+			//Look for targets to attack
+			std::vector<std::pair<int, int>> attack_targets;
+			CurrentAttackTargets(c, attack_targets);
 		}
 	}
 
@@ -602,6 +609,10 @@ void Clash::NextTurn() {
 	std::cout << "=========================== \n\n";
 
 }
+
+void Clash::CurrentAttackTargets(Creature& c, std::vector<std::pair<int, int>> attack_targets) {
+}
+
 
 void Clash::MoveCreature(Creature &c, std::vector<std::pair<int, int>> path_vector) {
 	std::cout << "\nMoving Creature. \n";
@@ -614,10 +625,10 @@ void Clash::MoveCreature(Creature &c, std::vector<std::pair<int, int>> path_vect
 	// Find how far along the path this creature moves. Make sure the movement isn't greater than the path length.
 	int path_index = -1;
 	if (c.Movement() > path_vector.size()) {
-		path_index = (int)path_vector.size() - 1;
+		path_index = (int)path_vector.size();
 	}
 	else {
-		path_index = c.Movement() - 1;
+		path_index = c.Movement();
 	}
 
 	int new_x = path_vector[path_index].first;
@@ -710,10 +721,42 @@ void Clash::TestGeneratePath(int value, std::vector<std::pair<int, int>>& curren
 }
 
 
-void Clash::GeneratePath(std::pair<int, int> current_location, Creature& creature, std::vector<std::pair<int, int>> current_path) {
+void Clash::GeneratePath(Creature& creature, std::vector<std::pair<int, int>> current_path) {
 	//Try to travel in each direction
 	HexBoardSpace* p_hex = NULL;
 	bool found_target = false;
+
+
+	std::pair<int, int> current_location = current_path.back();
+
+
+	// Did we find our target?  If so, we are with this path.
+	Player* p_player = IsCreaturesTargetNear(current_location, creature);	//TODO Don't return player object because the target could be something else.
+	if (p_player) {
+		//PrintMiniMap(current_path);
+
+		std::cout << "We found the creature's target player\n";
+		if (first_path) {
+			std::cout << "Setting the best path for the first time\n";
+			first_path = false;
+			best_path_vector = current_path;
+		}
+		else {
+			std::cout << "Found a new path.  Is it better?\n";
+			int best_path_size = (int)best_path_vector.size();
+			int current_path_size = (int)current_path.size();
+			std::cout << "Best path size: " << best_path_size << "\n";
+			std::cout << "Current path size: " << current_path_size << "\n";
+			if (current_path_size < best_path_size) {
+				std::cout << "We found a better path!\n";
+				best_path_vector = current_path;
+			}
+
+		}
+		return;	//Break out of for loop.  We are done.
+	}
+
+
 
 	//std::cout << "GeneratePath: Current Location " << current_location.first << ", " << current_location.second << "\n";
 
@@ -738,55 +781,32 @@ void Clash::GeneratePath(std::pair<int, int> current_location, Creature& creatur
 			if (std::find(current_path.begin(), current_path.end(), test_location) == current_path.end()) {
 				// Didn't find the item
 				std::pair<int, int> new_location{ p_hex->LocationX(), p_hex->LocationY() };
+
 				//ADD THIS X Y TO PATH VECTOR
 				current_path.push_back(new_location);
-				current_location = new_location;
+				current_location = current_path.back();
+
 				//std::cout << "pushing location on to vector. size: " << current_path.size() << "\n";
-				PrintMiniMap(current_path);
+				//PrintMiniMap(current_path);
 
 				//If this current path is already longer than our best path, bail.
 				if (first_path == false && (current_path.size() >= best_path_vector.size())) {
 					return;
 				}
 
-				// Did we find our target?  If so, we are with this path.
-				Player* p_player = IsCreaturesTargetNear(new_location, creature);	//TODO Don't return player object because the target could be something else.
-				if (p_player) {
-					PrintMiniMap(current_path);
-
-					std::cout << "We found the creature's target player\n";
-					if (first_path) {
-						std::cout << "Setting the best path for the first time\n";
-						first_path = false;
-						best_path_vector = current_path;
-					}
-					else {
-						std::cout << "Found a new path.  Is it better?\n";
-						int best_path_size = (int)best_path_vector.size();
-						int current_path_size = (int)current_path.size();
-						std::cout << "Best path size: " << best_path_size << "\n";
-						std::cout << "Current path size: " << current_path_size << "\n";
-						if (current_path_size < best_path_size) {
-							std::cout << "We found a better path!\n";
-							best_path_vector = current_path;
-						}
-
-					}
-					return;	//Break out of for loop.  We are done.
-				}
-
-
 				debug_interation_counter++;
 				if (debug_interation_counter == 8) { 
 					int i = 5; 
 				}
 
-				GeneratePath(new_location, creature, current_path);
+				GeneratePath(creature, current_path);
 				//std::cout << "Pre pop size: " << current_path.size() << "\n";
 				current_path.pop_back();
+				current_location = current_path.back();
+
 				//std::cout << "popping location off of current path.  New size: " << current_path.size() << "\n";
-				PrintMiniMap(current_path);
-				std::cout << ".\n";
+				//PrintMiniMap(current_path);
+				//std::cout << ".\n";
 
 			}
 			else {
@@ -896,9 +916,14 @@ Player* Clash::IsCreaturesTargetNear(std::pair<int, int> current_location, Creat
 			if (p_player) {
 				// Did we find the creatures target?
 				if (creature.PlayerTargetId() == p_player->Id()) {
-					std::cout << "=============== Creature found the target player in an adjoining hex\n";
+					std::cout << "=============== Creature found the target player, " << p_player->Name() << ", in an adjoining hex\n";
+					std::cout << "=============== Creature Player Target ID = " << creature.PlayerTargetId() << " And the found player ID = " << p_player->Id() << "\n";
 					//found_target = true;
 					return p_player;
+				}
+				else {
+					// We found the wrong player
+					p_player = NULL;
 				}
 			}
 
