@@ -594,6 +594,7 @@ void Clash::NextTurn() {
 			PrintMiniMap(best_path_vector);
 
 			//Move creature along path
+
 			if (best_path_vector.size() > 1) {
 				MoveCreature(c, best_path_vector);
 			}
