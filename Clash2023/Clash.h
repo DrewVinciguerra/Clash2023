@@ -52,7 +52,7 @@ private:
 	std::string StringOfChars(std::string& dest, std::string value, int length);
 	std::string CreateHexLine(std::string str, int length);
 	void PlayerColorPrint(int player_id, std::string text);
-	void GeneratePath(std::pair<int, int> current_location, Creature& pCreature, std::vector<std::pair<int, int>> current_path);
+	void GeneratePath(Creature& pCreature, std::vector<std::pair<int, int>> current_path);
 
 	//DEBUG STUFF
 	void TestGeneratePath(int value, std::vector<std::pair<int, int>>& current_path);
