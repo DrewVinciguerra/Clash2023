@@ -7,6 +7,23 @@
 
 Clash::Clash()
 {     // Constructor
+
+	// direction helpers
+	
+	even_row[TRAVEL_DIRECTION::NE] = std::make_pair(0, -1);
+	even_row[TRAVEL_DIRECTION::E] = std::make_pair(1, 0);
+	even_row[TRAVEL_DIRECTION::SE] = std::make_pair(0, 1);
+	even_row[TRAVEL_DIRECTION::SW] = std::make_pair(-1, 1);
+	even_row[TRAVEL_DIRECTION::W] = std::make_pair(-1, 0);
+	even_row[TRAVEL_DIRECTION::NW] = std::make_pair(-1, -1);
+
+	odd_row[TRAVEL_DIRECTION::NE] = std::make_pair(1, -1);
+	odd_row[TRAVEL_DIRECTION::E] = std::make_pair(1, 0);
+	odd_row[TRAVEL_DIRECTION::SE] = std::make_pair(1, 1);
+	odd_row[TRAVEL_DIRECTION::SW] = std::make_pair(0, 1);
+	odd_row[TRAVEL_DIRECTION::W] = std::make_pair(-1, 0);
+	odd_row[TRAVEL_DIRECTION::NW] = std::make_pair(0, -1);
+
 	test_setupClash();
 	SetupClash();
 
@@ -700,7 +717,7 @@ void Clash::GeneratePath(std::pair<int, int> current_location, Creature& creatur
 
 	//std::cout << "GeneratePath: Current Location " << current_location.first << ", " << current_location.second << "\n";
 
-	PrintMiniMap(current_path);
+	//PrintMiniMap(current_path);
 
 	for (int td = NE; td <= NW; td++) {
 		TRAVEL_DIRECTION my_travel_direction = static_cast<TRAVEL_DIRECTION>(td);
@@ -715,63 +732,69 @@ void Clash::GeneratePath(std::pair<int, int> current_location, Creature& creatur
 						}*/
 
 		p_hex = Travel(current_location, creature, my_travel_direction, found_target);
-		if (found_target) {
-			PrintMiniMap(current_path);
+		if (p_hex) {
+			// We found a valid space to move into but we need to make sure we are not back tracking over the way we just came.
+			std::pair<int, int> test_location{ p_hex->LocationX(), p_hex->LocationY() };
+			if (std::find(current_path.begin(), current_path.end(), test_location) == current_path.end()) {
+				// Didn't find the item
+				std::pair<int, int> new_location{ p_hex->LocationX(), p_hex->LocationY() };
+				//ADD THIS X Y TO PATH VECTOR
+				current_path.push_back(new_location);
+				current_location = new_location;
+				//std::cout << "pushing location on to vector. size: " << current_path.size() << "\n";
+				PrintMiniMap(current_path);
 
-			std::cout << "We found the creature's target player\n";
-			if (first_path) {
-				std::cout << "Setting the best path for the first time\n";
-				first_path = false;
-				best_path_vector = current_path;
+				//If this current path is already longer than our best path, bail.
+				if (first_path == false && (current_path.size() >= best_path_vector.size())) {
+					return;
+				}
+
+				// Did we find our target?  If so, we are with this path.
+				Player* p_player = IsCreaturesTargetNear(new_location, creature);	//TODO Don't return player object because the target could be something else.
+				if (p_player) {
+					PrintMiniMap(current_path);
+
+					std::cout << "We found the creature's target player\n";
+					if (first_path) {
+						std::cout << "Setting the best path for the first time\n";
+						first_path = false;
+						best_path_vector = current_path;
+					}
+					else {
+						std::cout << "Found a new path.  Is it better?\n";
+						int best_path_size = (int)best_path_vector.size();
+						int current_path_size = (int)current_path.size();
+						std::cout << "Best path size: " << best_path_size << "\n";
+						std::cout << "Current path size: " << current_path_size << "\n";
+						if (current_path_size < best_path_size) {
+							std::cout << "We found a better path!\n";
+							best_path_vector = current_path;
+						}
+
+					}
+					return;	//Break out of for loop.  We are done.
+				}
+
+
+				debug_interation_counter++;
+				if (debug_interation_counter == 8) { 
+					int i = 5; 
+				}
+
+				GeneratePath(new_location, creature, current_path);
+				//std::cout << "Pre pop size: " << current_path.size() << "\n";
+				current_path.pop_back();
+				//std::cout << "popping location off of current path.  New size: " << current_path.size() << "\n";
+				PrintMiniMap(current_path);
+				std::cout << ".\n";
+
 			}
 			else {
-				std::cout << "Found a new path.  Is it better?\n";
-				int best_path_size = (int)best_path_vector.size();
-				int current_path_size = (int)current_path.size();
-				std::cout << "Best path size: " << best_path_size << "\n";
-				std::cout << "Current path size: " << current_path_size << "\n";
-				if (current_path_size < best_path_size) {
-					std::cout << "We found a better path!\n";
-					best_path_vector = current_path;
-				}
-
-			}
-			return;	//Break out of for loop.  We are done.
-		}
-		else {
-			if (p_hex) {
-				// We found a valid space to move into but we need to make sure we are not back tracking over the way we just came.
-				std::pair<int, int> test_location{ p_hex->LocationX(), p_hex->LocationY() };
-				if (std::find(current_path.begin(), current_path.end(), test_location) == current_path.end()) {
-					// Didn't find the item
-					std::pair<int, int> new_location{ p_hex->LocationX(), p_hex->LocationY() };
-					//ADD THIS X Y TO PATH VECTOR
-					current_path.push_back(new_location);
-					//std::cout << "pushing location on to vector. size: " << current_path.size() << "\n";
-					PrintMiniMap(current_path);
-
-					//If this current path is already longer than our best path, bail.
-					if (first_path == false && (current_path.size() >= best_path_vector.size())) {
-						return;
-					}
-
-					debug_interation_counter++;
-					if (debug_interation_counter == 14) { 
-						int i = 5; }
-					GeneratePath(new_location, creature, current_path);
-					//std::cout << "Pre pop size: " << current_path.size() << "\n";
-					//current_path.pop_back();
-					//std::cout << "popping location off of current path.  New size: " << current_path.size() << "\n";
-					PrintMiniMap(current_path);
-					std::cout << ".\n";
-
-				}
-				else {
-					//This hex is already in the list.  .
-					//return;
-				}
+				//This hex is already in the list.  .
+				//return;
 			}
 		}
+		
 	}
 
 	// We hit a dead end.
@@ -790,30 +813,10 @@ HexBoardSpace* Clash::Travel(std::pair<int, int> current_location, Creature& cre
 	// Returns a valid HexBoardSpace if the move is valid.  Otherwise HexBoardSpace is NULL.
 
 	HexBoardSpace* p_hex = NULL;
+	Player* p_player = NULL;
 	found_target = false;
 
-	// Make direction helpers
-	std::map<TRAVEL_DIRECTION, std::pair<int, int>> even_row;
-	even_row[TRAVEL_DIRECTION::NE] = std::make_pair(0, -1);
-	even_row[TRAVEL_DIRECTION::E] =  std::make_pair(1, 0);
-	even_row[TRAVEL_DIRECTION::SE] = std::make_pair(0, 1);
-	even_row[TRAVEL_DIRECTION::SW] = std::make_pair(-1, 1);
-	even_row[TRAVEL_DIRECTION::W] =  std::make_pair(-1, 0);
-	even_row[TRAVEL_DIRECTION::NW] = std::make_pair(-1, -1);
-
-	std::map<TRAVEL_DIRECTION, std::pair<int, int>> odd_row;
-	odd_row[TRAVEL_DIRECTION::NE] = std::make_pair(1, -1);
-	odd_row[TRAVEL_DIRECTION::E] =  std::make_pair(1, 0);
-	odd_row[TRAVEL_DIRECTION::SE] = std::make_pair(1, 1);
-	odd_row[TRAVEL_DIRECTION::SW] = std::make_pair(0, 1);
-	odd_row[TRAVEL_DIRECTION::W] =  std::make_pair(-1, 0);
-	odd_row[TRAVEL_DIRECTION::NW] = std::make_pair(0, -1);
-
-//	int x = creature.X();
-//	int y = creature.Y();
-
-//	std::pair<int, int> current_location = std::make_pair(x, y);
-	std::pair<int, int> new_location(-5,-5);
+	std::pair<int, int> new_location(-5,-5);	// Init to weird value
 
 	if (Odd(current_location.second)) {
 		AddPairs(current_location, odd_row[direction], new_location);
@@ -822,7 +825,6 @@ HexBoardSpace* Clash::Travel(std::pair<int, int> current_location, Creature& cre
 	else {
 		AddPairs(current_location, even_row[direction], new_location);
 		//std::cout << new_location.first;
-
 	}
 
 	// Is this new location within the boards boundries?
@@ -830,9 +832,11 @@ HexBoardSpace* Clash::Travel(std::pair<int, int> current_location, Creature& cre
 		(new_location.second >= 0 && new_location.second < BOARD::BOARD_HEIGHT)) {
 		p_hex = &hex_board_array[new_location.first][new_location.second];
 		
+		p_player = IsCreaturesTargetNear(current_location, creature);
+
 		// What is on this hex space?
 		Creature* p_creature = p_hex->CreatureData();	
-		Player* p_player = p_hex->PlayerData();
+		//Player* p_player = p_hex->PlayerData();
 		Terrain* p_terrain = p_hex->TerrainData();
 
 //		if (p_creature) {
@@ -856,6 +860,53 @@ HexBoardSpace* Clash::Travel(std::pair<int, int> current_location, Creature& cre
 
 	return p_hex;
 
+}
+
+
+Player* Clash::IsCreaturesTargetNear(std::pair<int, int> current_location, Creature& creature) {
+	// Check all the surrounding spaces to see if the creatures target is next to the creature
+
+	HexBoardSpace* p_hex = NULL;
+	Player* p_player = NULL;
+
+
+	for (int td = NE; td <= NW; td++) {
+		TRAVEL_DIRECTION my_travel_direction = static_cast<TRAVEL_DIRECTION>(td);
+		std::pair<int, int> new_location(-5, -5);	// Init to weird value
+
+		if (Odd(current_location.second)) {
+			AddPairs(current_location, odd_row[my_travel_direction], new_location);
+			//std::cout << new_location.first;
+		}
+		else {
+			AddPairs(current_location, even_row[my_travel_direction], new_location);
+			//std::cout << new_location.first;
+		}
+
+		// Is this new location within the boards boundries?
+		if ((new_location.first >= 0 && new_location.first < BOARD::BOARD_WIDTH) &&
+			(new_location.second >= 0 && new_location.second < BOARD::BOARD_HEIGHT)) {
+			p_hex = &hex_board_array[new_location.first][new_location.second];
+
+			// What is on this hex space?
+			Creature* p_creature = p_hex->CreatureData();
+			p_player = p_hex->PlayerData();
+			Terrain* p_terrain = p_hex->TerrainData();
+
+			if (p_player) {
+				// Did we find the creatures target?
+				if (creature.PlayerTargetId() == p_player->Id()) {
+					std::cout << "=============== Creature found the target player in an adjoining hex\n";
+					//found_target = true;
+					return p_player;
+				}
+			}
+
+		}
+
+	}
+
+	return p_player;
 }
 
 void Clash::AddPairs(std::pair<int, int> p1, std::pair<int, int> p2, std::pair<int, int>& new_location) {

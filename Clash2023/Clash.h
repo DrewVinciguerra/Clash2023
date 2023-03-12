@@ -45,6 +45,8 @@ private:
 		NW,
 	};
 
+	std::map<TRAVEL_DIRECTION, std::pair<int, int>> even_row;
+	std::map<TRAVEL_DIRECTION, std::pair<int, int>> odd_row;
 
 	bool Odd(int);
 	std::string StringOfChars(std::string& dest, std::string value, int length);
@@ -71,6 +73,7 @@ private:
 	void AddPairs(std::pair<int, int> p1, std::pair<int, int> p2, std::pair<int, int>& new_location);
 	void SubtractPairs(std::pair<int, int> p1, std::pair<int, int> p2, std::pair<int, int>& new_location);
 	void PrintMiniMap(std::vector<std::pair<int, int>>& current_path);
+	Player* IsCreaturesTargetNear(std::pair<int, int> current_location, Creature& creature);
 
 
 public:
